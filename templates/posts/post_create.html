@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<a type="button" href="{% url 'posts:category_create' %}" class="btn btn-outline-dark btn-sm">Create Category</a>
+
+<form method="POST" action='.'>
+	{% csrf_token %}
+	{{ form.media }}
+	{{ form.as_p }}
+	<input type="submit" name="Submit">
+</form>
+
+{% endblock %}

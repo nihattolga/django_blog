@@ -1,0 +1,16 @@
+<div class="col-md-4 mt-5">
+	
+	<h4>Top Categories</h4>
+	<ul class="list-group list-group-flush">
+		{% for content in categories|slice:":10" %}
+	  <li class="list-group-item d-flex justify-content-between align-items-center">
+	    <a href="{% url 'home:post_by_categories' id=content.category_id category=content.category %}">{{ content.category }}</a>
+	    <span class="badge bg-primary rounded-pill bg-dark">{{ content.ncategory }}</span>
+	  </li>
+	  {% endfor %}
+	  <li class="list-group-item d-flex justify-content-between align-items-center">
+	  	<a href="{% url 'home:categories' %}">See More</a>
+	  </li>
+	</ul>
+
+</div>

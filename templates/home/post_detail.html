@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+<main class="post blog-post col-md-8"> 
+  <div class="container-md">
+    <div class="post-single">
+    	{% if post.thumbnail %}
+      <div class="post-thumbnail"><img src="{{ post.thumbnail.url }}" alt="..." class="img-fluid"></div>
+      {% endif%}
+
+      <div class="post-details">
+        <div class="post-meta d-flex justify-content-between">
+          <div class="category"><a href="#">{{ post.category }}</a></div>
+        </div>
+        <h1>{{ post.title }}{% if user.is_authenticated %}<a href="{% url 'accounts:account_bookmark_add' id=post.article_id %}"><i class="fas fa-bookmark"></i></a>{% endif %}</h1>
+        <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#" class="author d-flex align-items-center flex-wrap">
+            <div class="avatar"><img src="{{ post.created_by.avatar }}" alt="..." class="img-fluid"></div>
+            <div class="title"><span>{{ post.created_by.username }}</span></div></a>
+          <div class="d-flex align-items-center flex-wrap">       
+            <div class="date"><i class="icon-clock"></i> {% if post.created_at == post.updated_at %} {{ post.created_at|timesince }} ago {% else %} (updated){{ post.updated_at|timesince }} ago {% endif %}</div>
+            <div class="views"><i class="fas fa-eye"></i> {{ post.view }}</div>
+            <div class="comments meta-last"><i class="fas fa-comment"></i>{{ post.ncomment }}</div>
+          </div>
+        </div>
+        <div class="post-body">
+          <p class="lead">{{ post.subtitle }}</p>
+        </div>
+ 				
+        <div class="post-comments">
+          <header>
+            <h3 class="h6">Post Comments<span class="no-of-comments">({{ post.ncomment }})</span></h3>
+          </header>
+          {% for comment in comments %}
+          <div class="comment">
+            <div class="comment-header d-flex justify-content-between">
+              <div class="user d-flex align-items-center">
+                <div class="image"><img src="{{ comment.created_by.avatar.url }}" alt="..." class="img-fluid rounded-circle" width="40" height="40"></div>
+               <div class="title"><strong>{{ comment.created_by.username }}</strong><span class="date">{{ comment.created_at|timesince}} ago</span></div>
+              </div>
+            </div>
+            <div class="comment-body">
+              <p>{{ comment.comment }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% if request.user.is_authenticated %}
+        <div class="add-comment">
+          <header>
+            <h3 class="h6">Leave a reply</h3>
+          </header>
+          <form method="POST" action="." class="commenting-form">
+            {% csrf_token %}
+            <div class="row">
+              <div class="form-group col-md-12">
+                {{ form }}
+              </div>
+              <div class="form-group col-md-12">
+                <button type="submit" class="btn btn-secondary">Submit Comment</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        {% else %}
+        <a href="{% url 'accounts:accounts_login' %}" class="btn btn-primary">Login to comment</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</main>
+{% include 'home/sidebar.html' with categories=categories %}
+
+</div>
+</div>
+
+{% endblock %}

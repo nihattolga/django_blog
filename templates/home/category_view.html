@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-md">
+	<div class="row">
+		<div class="col-md">
+			<nav class="navbar navbar-expand-md navbar-light bg-light">
+				<div class="container-fluid">
+				  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+				    <ul class="navbar-nav mx-auto">
+				      <form class="d-flex" method="GET" action=".">
+				        <input type="text" class="form-control mb-2" placeholder="Search Category..." aria-label="Search" aria-describedby="button-addon2" name="cat" id="catsearch">
+				        <button class="btn btn-outline-dark" type="submit">Search</button>
+				      </form>
+				    </ul>
+				  </div>
+				</div>
+			</nav>
+		</div>
+	</div>
+</div>
+
+<div class="container-md">
+	<div class="row">
+		<div class="col-md">
+			<ul class="list-group list-group-flush">
+				{% for cat in categories %}
+			  <li class="list-group-item d-flex justify-content-between align-items-center">
+			    <a href="{% url 'home:post_by_categories' id=cat.category_id category=cat.category %}">{{ cat.category }}</a>
+			    <span class="badge bg-primary rounded-pill bg-dark">{{ cat.ncategory }}</span>
+			  </li>
+			  {% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+
+  {% if cat.has_other_pages %}
+ <nav class="mt-5" aria-label="Pagination">
+    <ul class="pagination justify-content-center">
+      {% if cat.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ cat.previous_page_number }}">Previous</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+      </li>
+      {% endif %}
+
+      {% for num in cat.paginator.page_range %}
+          {% if cat.number == num %}
+          <li class="page-item active" aria-current="page">
+          <span class="page-link">{{ num }}</span>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+          {% endif %}
+      {% endfor %}
+
+      {% if cat.has_next %}
+      <li class="page-item">
+          <a class="page-link" href="?page={{ cat.next_page_number }}">Next</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+      </li>
+      {% endif %}
+    </ul>
+    {% endif %}
+  </nav>
+
+
+
+
+
+
+
+{% endblock %}

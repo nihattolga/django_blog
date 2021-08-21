@@ -1,0 +1,84 @@
+<div class="row row-cols-1 row-cols-md-1 g-4">
+  {% for content in posts %}
+  <div class="col">
+    <div class="card h-100" style="width: 640px;">
+      {% if content.thumbnail %}
+      <img src="{{ content.thumbnail.url }}" class="card-img-top">
+      {% endif %}
+      <div class="card-body">
+        <div class="d-flex justify-content-start">
+          <span class="author"><a href="#"><small class="text-muted">Posted by {{ content.created_by.username }}</small></a></span>
+          &bull;
+          <span class="date"><p class="fw-light">{% if content.created_at == content.updated_at %} {{ content.created_at|timesince }} ago {% else %} (updated){{ content.updated_at|timesince }} ago {% endif %}</p></span>
+          &bull;
+          <span class="category"><a href=#><p class="fw-bold">{{ content.category }}</p></a></span>
+        </div>
+        {% if content.title %}
+        <h4 class="card-title"><a href="{% url 'home:detail_view' id=content.article_id slug=content.slug %}">{{ content.title }}</a></h4>
+        <h6 class="card-title fw-light">{{ content.subtitle }}</h6>
+        {% endif %}
+        <p class="card-text">{{ content.content|safe }}</p>
+      </div>
+      <div class="card-footer">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+        <div><a class="btn btn-outline-dark"><i class="fas fa-eye"></i></a>
+        <small class="text-muted">{{ content.view }}</small></div>
+
+        <div><a class="btn btn-outline-dark" href="{% url 'accounts:post_upvote' id=content.article_id %}"><i class="fas fa-heart"></i></a>
+        <small class="text-muted">{{ content.total_upvote }}</small></div>
+
+        <div><a class="btn btn-outline-dark" href="{% url 'accounts:post_downvote' id=content.article_id %}"><i class="fas fa-heart-broken"></i></a>
+        <small class="text-muted">{{ content.total_downvote }}</small></div>
+
+        <div><a class="btn btn-outline-dark" href="#"><i class="fas fa-comment"></i></a>
+        <small class="text-muted">{{ content.ncomment }}</small></div>
+        {% if user.is_authenticated %}
+        <div><a class="btn btn-outline-dark" href="{% url 'accounts:account_bookmark_add' id=content.article_id %}"><i class="fas fa-bookmark"></i></a></div>
+        {% endif %}
+        {% if user.is_authenticated and user.id == content.created_by.id %}
+        <div><a class="btn btn-outline-dark" href="{% url 'posts:post_edit' id=content.article_id slug=content.slug %}"><i class="fas fa-edit"></i></a></div>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- pagination -->
+  {% if posts.has_other_pages %}
+ <nav class="mt-4" aria-label="Pagination" >
+    <ul class="pagination justify-content-center">
+      {% if posts.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ content.previous_page_number }}">Previous</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+      </li>
+      {% endif %}
+
+      {% for num in posts.paginator.page_range %}
+          {% if posts.number == num %}
+          <li class="page-item active" aria-current="page">
+          <span class="page-link">{{ num }}</span>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+          {% endif %}
+      {% endfor %}
+
+      {% if posts.has_next %}
+      <li class="page-item">
+          <a class="page-link" href="?page={{ content.next_page_number }}">Next</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+      </li>
+      {% endif %}
+    </ul>
+    {% endif %}
+  </nav>
+

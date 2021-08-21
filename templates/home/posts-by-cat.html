@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-md mx-4">
+	<div class="row">
+		<div class="col-md-8">
+{% include 'home/index-posts.html' with posts=posts %}
+		</div>
+{% include 'home/sidebar.html' with categories=categories %}
+	</div>
+</div>
+{% endblock %}

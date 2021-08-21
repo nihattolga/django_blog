@@ -1,0 +1,44 @@
+{% load static %}
+<section>
+  <nav class="navbar navbar-expand-md navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home:index' %}">Blog</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+
+        <ul class="navbar-nav mx-auto">
+          <form class="d-flex" method="GET" action="{% url 'home:search' %}">
+            <input type="text" class="form-control mb-2" placeholder="Search..." aria-label="Search" aria-describedby="button-addon2" name="q" id="blogsearch">
+            <button class="btn btn-outline-dark" type="submit">Search</button>
+          </form>
+        </ul>
+
+        <ul class="navbar-nav ms-auto justify-content-end" >
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'home:index' %}">Home</a>
+          </li>
+          {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{% if user.avatar %} <img src="{{ user.avatar.url }}" width="40" height="40" class="rounded-circle z-depth-0">{% else %}<img src="{% get_media_prefix %}dummy-avatar.jpg" width="40" height="40" class="rounded-circle z-depth-0">{% endif %} </a>
+            <ul class="dropdown-menu dropdown-menu-md-end" aria-labelledby="navbarScrollingDropdown">
+              <li><a class="dropdown-item" href="{% url 'accounts:accounts_view' %}">Profile</a></li>
+               <li><a class="dropdown-item" href="{% url 'posts:post_create' %}">Create Post</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url 'accounts:accounts_logout' %}">Logout</a></li>
+            </ul>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a type="button" href="{% url 'accounts:accounts_login' %}" class="btn btn-outline-dark btn-sm">LogIn</a>
+          </li>
+          <li class="nav-item">
+            <a type="button" href="{% url 'accounts:accounts_signup' %}" class="btn btn-outline-dark btn-sm">SignUp</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+</section>

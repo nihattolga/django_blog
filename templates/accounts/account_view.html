@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-Overview" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Overview</button>
+    
+    <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-Posts" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Posts</button>
+
+    <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-Comments" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Comments</button>
+
+    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-Saved" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Saved</button>
+
+    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-Upvoted" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Upvoted</button>
+
+    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-Downvoted" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Downvoted</button>
+  </div>
+</nav>
+
+<div class="tab-content" id="nav-tabContent">
+
+  <div class="tab-pane fade show active" id="nav-Overview" role="tabpanel" aria-labelledby="nav-home-tab">
+    
+    <div class="container-md">
+      <div class="row">
+        <div class="col-md">
+          <ul>
+            <li>
+              <span class="fw-bold">Username</span><br>
+              <span class="text-muted fs-6">{{ user.username }}</span>
+            </li>
+
+            <li>
+              <span class="fw-bold">Email Adress</span><br>
+              <span class="text-muted fs-6">{{ user.email }}</span>
+            </li>
+
+            <li>
+              <a type="button" href="{% url 'accounts:accounts_update' %}" class="btn btn-outline-dark">Change</a>
+            </li>
+
+            <li>
+              <a type="button" href="{% url 'accounts:accounts_deactivate' %}" class="btn btn-outline-danger">Deactivate</a>
+              <a type="button" href="{% url 'accounts:accounts_delete' %}" class="btn btn-outline-danger">Delete</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="tab-pane fade" id="nav-Posts" role="tabpanel" aria-labelledby="nav-home-tab">
+    {% include 'home/index-posts.html' with posts=user_posts %}
+  </div>
+
+  <div class="tab-pane fade" id="nav-Comments" role="tabpanel" aria-labelledby="nav-home-tab">
+    {% for com in user_comments %}
+      <ul class="list-group list-group-flush">
+        <li>{{ com }}({{ com.created_at }})({{ com.article }})</li>
+      </ul>
+    {% endfor %}
+
+  </div>
+
+  <div class="tab-pane fade" id="nav-Saved" role="tabpanel" aria-labelledby="nav-profile-tab">
+    {% include 'home/index-posts.html' with posts=user_saved_posts %}
+
+  </div>
+
+  <div class="tab-pane fade" id="nav-Upvoted" role="tabpanel" aria-labelledby="nav-contact-tab">
+    {% include 'home/index-posts.html' with posts=user_upvoted_posts %}
+
+  </div>
+
+  <div class="tab-pane fade" id="nav-Downvoted" role="tabpanel" aria-labelledby="nav-contact-tab">
+    {% include 'home/index-posts.html' with posts=user_downvoted_posts %}
+
+  </div>
+
+</div>
+
+
+
+
+
+{% endblock %}
